@@ -12,3 +12,6 @@
 
 # ignore local db
 usage_data.db
+
+# ignore .gem
+*.gem
