@@ -51,7 +51,8 @@ module TimeBuffer
     end
 
     def execute(sql, *params)
-      connection.execute(sql, *params)
+      puts "Writing to db: #{params}"
+      # connection.execute(sql, *params)
     end
   end
 end
