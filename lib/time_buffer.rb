@@ -14,20 +14,9 @@ module TimeBuffer
         previous_app = nil
         previous_tab = nil
         last_interaction_at = Time.now
-        data = {
-          "Visual Studio Code" => {
-            sessions: 0,
-            total_duration: 0
-          },
-          "Google Chrome" => {
-            sessions: 0,
-            total_duration: 0
-          }
-        }
         loop do
           app_data = OsaScript.app_data
           app_name = app_data[:name]
-          data[app_name] ||= {sessions: 0, total_duration: 0}
           if app_name == "Google Chrome"
             current_tab = OsaScript.current_tab
             if current_tab != previous_tab
@@ -39,15 +28,11 @@ module TimeBuffer
           if app_name != previous_app
             puts "Active application changed to: #{app_name}"
             now = Time.now
-            curr_duration = (now - last_interaction_at).to_i
-            data[app_name][:sessions] += 1
-            data[app_name][:total_duration] += curr_duration
             last_interaction_at = Time.now
             insert_application(app_data)
             session_data = {start_time: last_interaction_at.strftime("%Y-%m-%d %H:%M:%S"), end_time: now.strftime("%Y-%m-%d %H:%M:%S")}
             insert_time_session(session_data, app_data)
             previous_app = app_name
-            puts "Data: #{data}"
           end
 
           sleep 1
