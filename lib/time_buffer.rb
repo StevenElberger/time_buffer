@@ -29,7 +29,7 @@ module TimeBuffer
           app_name = app_data[:name]
           data[app_name] ||= {sessions: 0, total_duration: 0}
           if app_name == "Google Chrome"
-            current_tab = `osascript -e 'tell application "Google Chrome" to get title of active tab of front window'`.strip
+            current_tab = OsaScript.current_tab
             if current_tab != previous_tab
               puts "Active Chrome tab changed to: #{current_tab}"
               previous_tab = current_tab

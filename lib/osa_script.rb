@@ -15,6 +15,10 @@ module TimeBuffer
         end
         {bundle_id: current_app_bundle_id, name: app_name}
       end
+
+      def current_tab
+        `osascript -e 'tell application "Google Chrome" to get title of active tab of front window'`.strip
+      end
     end
   end
 end
