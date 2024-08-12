@@ -8,7 +8,7 @@ require "sqlite3"
 module TimeBuffer
   class Tracker
     class << self
-      Database = DatabaseConnector.start
+      Database = DatabaseConnector.new
 
       def start
         previous_app = nil
