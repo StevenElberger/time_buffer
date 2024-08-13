@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "time_buffer/version"
+require_relative "time_buffer/database_connector"
 require_relative "time_buffer/osa_script_app"
 require_relative "time_buffer/osa_script_app_browser"
 require_relative "time_buffer/osa_script_app_builder"
-require_relative "database_connector"
+require_relative "time_buffer/version"
 require_relative "osa_script"
 require "sqlite3"
 
