@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "time_buffer/database_connector"
+require_relative "time_buffer/osa_script"
 require_relative "time_buffer/osa_script_app"
 require_relative "time_buffer/osa_script_app_browser"
 require_relative "time_buffer/osa_script_app_builder"
