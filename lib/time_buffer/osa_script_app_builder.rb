@@ -15,7 +15,7 @@ module TimeBuffer
         if app_class.nil?
           OsaScriptApp.new(app_bundle_id)
         else
-          app_class.new
+          app_class.new(app_bundle_id)
         end
       end
     end

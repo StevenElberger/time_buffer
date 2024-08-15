@@ -23,6 +23,7 @@ module TimeBuffer
           application_id INTEGER NOT NULL,
           start_time DATETIME NOT NULL,
           end_time DATETIME,
+          metadata JSONB,
           FOREIGN KEY (application_id) REFERENCES applications(id)
         );
       SQL

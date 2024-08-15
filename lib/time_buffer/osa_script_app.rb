@@ -11,5 +11,7 @@ module TimeBuffer
     def name
       @name ||= `osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true'`.strip
     end
+
+    def metadata = {}
   end
 end
