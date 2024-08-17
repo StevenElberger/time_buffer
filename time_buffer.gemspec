@@ -9,11 +9,10 @@ Gem::Specification.new do |spec|
   spec.email = ["stevenelberger@gmail.com"]
 
   spec.summary = "Tracks time spent on all applications"
-  # spec.description = "TODO: Write a longer description or delete this line."
-  spec.homepage = "https://stevenan.com"
+  spec.homepage = "https://github.com/StevenElberger/time_buffer"
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/StevenElberger/time_buffer"
