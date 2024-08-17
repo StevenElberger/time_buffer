@@ -12,4 +12,3 @@ module TimeBuffer
     end
   end
 end
-
