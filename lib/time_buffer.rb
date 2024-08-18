@@ -21,9 +21,9 @@ module TimeBuffer
         loop do
           app_data = OsaScript.app_data
           app_name = app_data.name
+          now = Time.now
 
           if app_name != previous_app
-            now = Time.now
             insert_application(app_data)
             session_data = Session.new(start_time: last_interaction_at, end_time: now)
             last_interaction_at = now
@@ -33,7 +33,6 @@ module TimeBuffer
           metadata = app_data.metadata
           if metadata
             if metadata != previous_metadata && app_name == previous_app
-              now = Time.now
               session_data = Session.new(start_time: last_interaction_at, end_time: now)
               last_interaction_at = now
               insert_time_session(session_data, app_data)
