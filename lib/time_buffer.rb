@@ -15,7 +15,7 @@ module TimeBuffer
 
       def start
         previous_app = nil
-        previous_metadata = nil
+        previous_metadata = {}
         last_interaction_at = Time.now
 
         loop do
@@ -29,21 +29,22 @@ module TimeBuffer
             session_data = Session.new(start_time: last_interaction_at, end_time: now)
             last_interaction_at = now
             insert_time_session(session_data, app_data)
-            previous_app = app_name
           end
 
           metadata = app_data.metadata
-          puts "Current metadata: #{metadata}"
+          # puts "Current metadata: #{metadata}"
           if metadata
-            if metadata != previous_metadata && !previous_metadata&.empty?
-              puts "Active tab changed to #{metadata}"
+            if metadata != previous_metadata && app_name == previous_app
+              # puts "Active tab changed to #{metadata}"
               now = Time.now
               session_data = Session.new(start_time: last_interaction_at, end_time: now)
               last_interaction_at = now
               insert_time_session(session_data, app_data)
-              previous_metadata = metadata
             end
           end
+
+          previous_app = app_name
+          previous_metadata = metadata
 
           sleep 1
         end
