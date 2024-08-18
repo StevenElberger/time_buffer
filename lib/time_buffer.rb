@@ -23,7 +23,6 @@ module TimeBuffer
           app_name = app_data.name
 
           if app_name != previous_app
-            puts "Active application changed to: #{app_name}"
             now = Time.now
             insert_application(app_data)
             session_data = Session.new(start_time: last_interaction_at, end_time: now)
@@ -32,10 +31,8 @@ module TimeBuffer
           end
 
           metadata = app_data.metadata
-          # puts "Current metadata: #{metadata}"
           if metadata
             if metadata != previous_metadata && app_name == previous_app
-              # puts "Active tab changed to #{metadata}"
               now = Time.now
               session_data = Session.new(start_time: last_interaction_at, end_time: now)
               last_interaction_at = now
