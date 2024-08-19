@@ -1,58 +1,48 @@
 # frozen_string_literal: true
 
+require_relative "time_buffer/application_handler"
 require_relative "time_buffer/database_connector"
 require_relative "time_buffer/osa_script"
 require_relative "time_buffer/osa_script_app"
 require_relative "time_buffer/osa_script_app_browser"
 require_relative "time_buffer/osa_script_app_builder"
-require_relative "time_buffer/session"
+require_relative "time_buffer/session_handler"
+require_relative "time_buffer/state_detector"
 require_relative "time_buffer/version"
 require "sqlite3"
 module TimeBuffer
   class Tracker
-    class << self
-      Database = DatabaseConnector.new
+    def initialize
+      @state_detector = StateDetector.new
+    end
 
-      def start
-        previous_app = nil
-        previous_metadata = {}
-        last_interaction_at = Time.now
+    def start
+      loop do
+        now = Time.now
 
-        loop do
-          app_data = OsaScript.app_data
-          app_name = app_data.name
-          now = Time.now
-
-          if app_name != previous_app
-            insert_application(app_data)
-            session_data = Session.new(start_time: last_interaction_at, end_time: now)
-            last_interaction_at = now
-            insert_time_session(session_data, app_data)
-          end
-
-          metadata = app_data.metadata
-          if metadata
-            if metadata != previous_metadata && app_name == previous_app
-              session_data = Session.new(start_time: last_interaction_at, end_time: now)
-              last_interaction_at = now
-              insert_time_session(session_data, app_data)
-            end
-          end
-
-          previous_app = app_name
-          previous_metadata = metadata
-
-          sleep 1
+        if state_detector.app_changed?
+          handle_app_change(state_detector.current_app_data, now)
+        elsif state_detector.metadata_changed?
+          handle_metadata_change(state_detector.current_app_data, now)
         end
-      end
 
-      def insert_application(app_data)
-        Database.execute("INSERT OR IGNORE INTO applications (bundle_id, app_name) VALUES (?, ?)", [app_data.bundle_id, app_data.name])
+        sleep 1
       end
+    end
 
-      def insert_time_session(session_data, app_data)
-        Database.execute("INSERT INTO time_sessions (application_id, start_time, end_time, metadata) SELECT id, ?, ? FROM applications WHERE bundle_id = ?;", [session_data.start_time, session_data.end_time, app_data.bundle_id, app_data.metadata])
-      end
+    private
+
+    attr_reader :state_detector
+
+    def handle_app_change(app_data, now)
+      ApplicationHandler.new(app_data).insert_application
+      SessionHandler.new(start_time: state_detector.last_interaction_at, end_time: now).insert_time_session(app_data)
+      state_detector.update_last_interaction_time(now)
+    end
+
+    def handle_metadata_change(app_data, now)
+      SessionHandler.new(start_time: state_detector.last_interaction_at, end_time: now).insert_time_session(app_data)
+      state_detector.update_last_interaction_time(now)
     end
   end
 end

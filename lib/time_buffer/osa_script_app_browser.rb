@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'osa_script_app_builder'
+require_relative "osa_script_app_builder"
 
 module TimeBuffer
   class OsaScriptAppBrowser < OsaScriptApp
